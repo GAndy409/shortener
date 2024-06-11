@@ -2,14 +2,21 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 
 	shorts "github.com/GAndy409/shortener/internal/app/shortener"
+	"github.com/gorilla/mux"
 )
 
-func HandleInit(mux *http.ServeMux) {
-	mux.HandleFunc("/", Hello)
+func RouterInit() *mux.Router {
+	router := mux.NewRouter()
+
+	router.HandleFunc("/", Hello)
+	router.HandleFunc("/{id}", Hello)
+
+	return router
 }
 
 func Hello(w http.ResponseWriter, r *http.Request) {
@@ -22,12 +29,8 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 		sUrl := shorts.Shorts.ShortUrl(responseString)
 		jsonPresenter(w, http.StatusCreated, sUrl)
 	} else if r.Method == http.MethodGet {
-		responseString, err := rString(r)
-		if err != nil {
-			jsonPresenter(w, http.StatusBadRequest, err)
-		}
-
-		search, fullUrl := shorts.Shorts.CheckUrl(responseString)
+		shortUrl := mux.Vars(r)["id"]
+		search, fullUrl := shorts.Shorts.CheckShortKey(shortUrl)
 		if search {
 			jsonPresenter(w, http.StatusTemporaryRedirect, fullUrl)
 		} else {

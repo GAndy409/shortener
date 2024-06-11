@@ -7,11 +7,9 @@ import (
 )
 
 func main() {
-	mux := http.NewServeMux()
+	router := app.RouterInit()
 
-	app.HandleInit(mux)
-
-	err := http.ListenAndServe(":8080", mux)
+	err := http.ListenAndServe(":8080", router)
 	if err != nil {
 		panic(err)
 	}

@@ -12,11 +12,27 @@ func (s *Shortener) CheckUrl(u string) (bool, string) {
 		}
 	}()
 
-	if shortUrl, ok := s.listUrls[u]; ok {
+	if shortUrl, ok := s.listUrls[fmt.Sprintf("%s/%s", host, u)]; ok {
 		return true, shortUrl
 	} else {
 		return false, ""
 	}
+}
+
+func (s *Shortener) CheckShortKey(shortKey string) (bool, string) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Printf("panic: %s", err)
+		}
+	}()
+
+	shortUrl := fmt.Sprintf("%s/%s", host, shortKey)
+	for url := range s.listUrls {
+		if s.listUrls[url] == shortUrl {
+			return true, url
+		}
+	}
+	return false, ""
 }
 
 func (s *Shortener) ShortUrl(u string) string {
@@ -24,7 +40,7 @@ func (s *Shortener) ShortUrl(u string) string {
 		return shortUrl
 	}
 
-	result := randSeq(8)
+	result := fmt.Sprintf("%s/%s", host, randSeq(8))
 	s.listUrls[u] = result
 	return result
 }

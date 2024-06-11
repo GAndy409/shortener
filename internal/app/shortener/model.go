@@ -9,8 +9,11 @@ type Shortener struct {
 	listUrls map[string]string
 }
 
-var Shorts Shortener
-var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789")
+var (
+	Shorts  Shortener
+	letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789")
+	host    = "http://localhost:8080"
+)
 
 func init() {
 	Shorts.listUrls = make(map[string]string)
