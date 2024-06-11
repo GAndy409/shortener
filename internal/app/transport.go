@@ -2,7 +2,6 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -20,7 +19,6 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 			jsonPresenter(w, err)
 		}
 
-		fmt.Println(responseString)
 		sUrl := shorts.Shorts.ShortUrl(responseString)
 		jsonPresenter(w, sUrl)
 	} else if r.Method == http.MethodGet {
