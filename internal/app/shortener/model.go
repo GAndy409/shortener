@@ -1,11 +1,18 @@
 package shortener
 
+import (
+	"math/rand"
+	"time"
+)
+
 type Shortener struct {
-	ListUrls map[string]string
+	listUrls map[string]string
 }
 
 var Shorts Shortener
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789")
 
 func init() {
-	Shorts.ListUrls = make(map[string]string)
+	Shorts.listUrls = make(map[string]string)
+	rand.Seed(time.Now().UnixNano())
 }

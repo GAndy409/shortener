@@ -2,7 +2,11 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
+
+	shorts "github.com/GAndy409/shortener/internal/app/shortener"
 )
 
 func HandleInit(mux *http.ServeMux) {
@@ -11,10 +15,38 @@ func HandleInit(mux *http.ServeMux) {
 
 func Hello(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
-		jsonPresenter(w, "Hello Post")
+		responseString, err := rString(r)
+		if err != nil {
+			jsonPresenter(w, err)
+		}
+
+		fmt.Println(responseString)
+		sUrl := shorts.Shorts.ShortUrl(responseString)
+		jsonPresenter(w, sUrl)
 	} else if r.Method == http.MethodGet {
-		
+		responseString, err := rString(r)
+		if err != nil {
+			jsonPresenter(w, err)
+		}
+
+		fmt.Println(responseString)
+		search, fullUrl := shorts.Shorts.CheckUrl(responseString)
+		if search {
+			jsonPresenter(w, fullUrl)
+		} else {
+			jsonPresenter(w, "not found")
+		}
 	}
+}
+
+func rString(r *http.Request) (string, error) {
+	responseData, err := io.ReadAll(r.Body)
+	if err != nil {
+		return "", err
+	}
+	responseString := string(responseData)
+	fmt.Println(responseString)
+	return responseString, nil
 }
 
 func jsonPresenter(w http.ResponseWriter, v interface{}) {
