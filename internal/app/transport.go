@@ -35,6 +35,11 @@ func ShortingPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShortingGet(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	
 	shortURL := mux.Vars(r)["id"]
 	search, fullURL := shorts.Shorts.CheckShortKey(shortURL)
 	if search {
