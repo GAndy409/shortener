@@ -23,18 +23,18 @@ func ShortingPost(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-	sUrl := shorts.Shorts.ShortUrl(responseString)
+	sURL := shorts.Shorts.ShortURL(responseString)
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "text/plain")
-	_, _ = w.Write([]byte(sUrl))
+	_, _ = w.Write([]byte(sURL))
 }
 
 func ShortingGet(w http.ResponseWriter, r *http.Request) {
-	shortUrl := mux.Vars(r)["id"]
-	search, fullUrl := shorts.Shorts.CheckShortKey(shortUrl)
+	shortURL := mux.Vars(r)["id"]
+	search, fullURL := shorts.Shorts.CheckShortKey(shortURL)
 	if search {
 		w.Header().Set("Content-Type", "text/plain")
-		w.Header().Set("Location", fullUrl)
+		w.Header().Set("Location", fullURL)
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	} else {
 		w.WriteHeader(http.StatusBadRequest)

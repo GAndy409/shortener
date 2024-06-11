@@ -2,7 +2,6 @@ package shortener
 
 import (
 	"fmt"
-	"math/rand"
 )
 
 func (s *Shortener) CheckUrl(u string) (bool, string) {
@@ -12,8 +11,8 @@ func (s *Shortener) CheckUrl(u string) (bool, string) {
 		}
 	}()
 
-	if shortUrl, ok := s.listUrls[u]; ok {
-		return true, shortUrl
+	if shortURL, ok := s.listUrls[u]; ok {
+		return true, shortURL
 	} else {
 		return false, ""
 	}
@@ -26,18 +25,18 @@ func (s *Shortener) CheckShortKey(shortKey string) (bool, string) {
 		}
 	}()
 
-	shortUrl := fmt.Sprintf("%s/%s", host, shortKey)
+	shortURL := fmt.Sprintf("%s/%s", host, shortKey)
 	for url := range s.listUrls {
-		if s.listUrls[url] == shortUrl {
+		if s.listUrls[url] == shortURL {
 			return true, url
 		}
 	}
 	return false, ""
 }
 
-func (s *Shortener) ShortUrl(u string) string {
-	if search, shortUrl := s.CheckUrl(u); search {
-		return shortUrl
+func (s *Shortener) ShortURL(u string) string {
+	if search, shortURL := s.CheckUrl(u); search {
+		return shortURL
 	}
 
 	result := fmt.Sprintf("%s/%s", host, randSeq(8))
@@ -48,7 +47,7 @@ func (s *Shortener) ShortUrl(u string) string {
 func randSeq(n int) string {
 	b := make([]rune, n)
 	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
+		b[i] = letters[r.Intn(len(letters))]
 	}
 	return string(b)
 }
