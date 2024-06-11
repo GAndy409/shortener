@@ -18,6 +18,11 @@ func RouterInit() *mux.Router {
 }
 
 func ShortingPost(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
 	responseString, err := rString(r)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
