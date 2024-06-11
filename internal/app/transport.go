@@ -29,7 +29,6 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 			jsonPresenter(w, err)
 		}
 
-		fmt.Println(responseString)
 		search, fullUrl := shorts.Shorts.CheckUrl(responseString)
 		if search {
 			jsonPresenter(w, fullUrl)
@@ -45,7 +44,6 @@ func rString(r *http.Request) (string, error) {
 		return "", err
 	}
 	responseString := string(responseData)
-	fmt.Println(responseString)
 	return responseString, nil
 }
 

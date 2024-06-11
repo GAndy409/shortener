@@ -12,14 +12,18 @@ func (s *Shortener) CheckUrl(u string) (bool, string) {
 		}
 	}()
 
-	if v, ok := s.listUrls[u]; ok {
-		return true, v
+	if shortUrl, ok := s.listUrls[u]; ok {
+		return true, shortUrl
 	} else {
 		return false, ""
 	}
 }
 
-func (s *Shortener) ShortUrl(u string) (string) {
+func (s *Shortener) ShortUrl(u string) string {
+	if search, shortUrl := s.CheckUrl(u); search {
+		return shortUrl
+	}
+
 	result := randSeq(8)
 	s.listUrls[u] = result
 	return result
