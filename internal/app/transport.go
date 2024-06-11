@@ -34,7 +34,6 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 		if search {
 			w.Header().Set("Content-Type", "text/plain")
 			w.Header().Set("Location", fullUrl)
-			_, _ = w.Write([]byte(fullUrl))
 			w.WriteHeader(http.StatusTemporaryRedirect)
 		} else {
 			w.WriteHeader(http.StatusBadRequest)
