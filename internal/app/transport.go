@@ -21,18 +21,23 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		responseString, err := rString(r)
 		if err != nil {
-			TextPlainPresenter(w, http.StatusBadRequest, err.Error())
+			w.WriteHeader(http.StatusBadRequest)
 		}
 
 		sUrl := shorts.Shorts.ShortUrl(responseString)
-		TextPlainPresenter(w, http.StatusCreated, sUrl)
+		w.WriteHeader(http.StatusCreated)
+		w.Header().Set("Content-Type", "text/plain")
+		_, _ = w.Write([]byte(sUrl))
 	} else if r.Method == http.MethodGet {
 		shortUrl := mux.Vars(r)["id"]
 		search, fullUrl := shorts.Shorts.CheckShortKey(shortUrl)
 		if search {
-			TextPlainPresenter(w, http.StatusTemporaryRedirect, fullUrl)
+			w.Header().Set("Content-Type", "text/plain")
+			w.Header().Set("Location", fullUrl)
+			_, _ = w.Write([]byte(fullUrl))
+			w.WriteHeader(http.StatusTemporaryRedirect)
 		} else {
-			TextPlainPresenter(w, http.StatusBadRequest, "not found")
+			w.WriteHeader(http.StatusBadRequest)
 		}
 	}
 }
@@ -44,10 +49,4 @@ func rString(r *http.Request) (string, error) {
 	}
 	responseString := string(responseData)
 	return responseString, nil
-}
-
-func TextPlainPresenter(w http.ResponseWriter, status int, s string) {
-	w.Header().Set("Content-Type", "text/plain")
-	w.WriteHeader(status)
-	_, _ = w.Write([]byte(s))
 }
