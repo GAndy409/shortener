@@ -7,6 +7,7 @@ import (
 
 func HandleInit(mux *http.ServeMux) {
 	mux.HandleFunc("/", Hello)
+	mux.HandleFunc("/", Hello)
 }
 
 func Hello(w http.ResponseWriter, r *http.Request) {
