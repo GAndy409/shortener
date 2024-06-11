@@ -48,7 +48,7 @@ func rString(r *http.Request) (string, error) {
 }
 
 func jsonPresenter(w http.ResponseWriter, status int, v interface{}) {
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(status)
 
 	_ = json.NewEncoder(w).Encode(v)

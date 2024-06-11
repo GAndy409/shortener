@@ -12,7 +12,7 @@ func (s *Shortener) CheckUrl(u string) (bool, string) {
 		}
 	}()
 
-	if shortUrl, ok := s.listUrls[fmt.Sprintf("%s/%s", host, u)]; ok {
+	if shortUrl, ok := s.listUrls[u]; ok {
 		return true, shortUrl
 	} else {
 		return false, ""
