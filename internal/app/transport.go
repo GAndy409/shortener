@@ -1,7 +1,6 @@
 package app
 
 import (
-	"encoding/json"
 	"io"
 	"net/http"
 
@@ -22,18 +21,18 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		responseString, err := rString(r)
 		if err != nil {
-			jsonPresenter(w, http.StatusBadRequest, err)
+			TextPlainPresenter(w, http.StatusBadRequest, err.Error())
 		}
 
 		sUrl := shorts.Shorts.ShortUrl(responseString)
-		jsonPresenter(w, http.StatusCreated, sUrl)
+		TextPlainPresenter(w, http.StatusCreated, sUrl)
 	} else if r.Method == http.MethodGet {
 		shortUrl := mux.Vars(r)["id"]
 		search, fullUrl := shorts.Shorts.CheckShortKey(shortUrl)
 		if search {
-			jsonPresenter(w, http.StatusTemporaryRedirect, fullUrl)
+			TextPlainPresenter(w, http.StatusTemporaryRedirect, fullUrl)
 		} else {
-			jsonPresenter(w, http.StatusBadRequest, "not found")
+			TextPlainPresenter(w, http.StatusBadRequest, "not found")
 		}
 	}
 }
@@ -47,9 +46,8 @@ func rString(r *http.Request) (string, error) {
 	return responseString, nil
 }
 
-func jsonPresenter(w http.ResponseWriter, status int, v interface{}) {
+func TextPlainPresenter(w http.ResponseWriter, status int, s string) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(status)
-
-	_ = json.NewEncoder(w).Encode(v)
+	_, _ = w.Write([]byte(s))
 }
