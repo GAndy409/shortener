@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func (s *Shortener) CheckUrl(u string) (bool, string) {
+func (s *Shortener) CheckURL(u string) (bool, string) {
 	defer func() {
 		if err := recover(); err != nil {
 			fmt.Printf("panic: %s", err)
@@ -35,7 +35,7 @@ func (s *Shortener) CheckShortKey(shortKey string) (bool, string) {
 }
 
 func (s *Shortener) ShortURL(u string) string {
-	if search, shortURL := s.CheckUrl(u); search {
+	if search, shortURL := s.CheckURL(u); search {
 		return shortURL
 	}
 
